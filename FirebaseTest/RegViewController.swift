@@ -1,19 +1,18 @@
 //
-//  ViewController.swift
+//  RegViewController.swift
 //  FirebaseTest
 //
-//  Created by Valya on 15.10.2022.
+//  Created by Valya on 16.10.2022.
 //
 
 import UIKit
 import SnapKit
 
-class ViewController: UIViewController {
+class RegViewController: UIViewController {
     let label = UILabel(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
     let emailTextField = UITextField()
     let passwordTextField = UITextField()
-    let noAcButton = UIButton(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
-    let signInButton = UIButton(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
+    let signUpButton = UIButton(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
     let service = Service()
     
     override func viewDidLoad() {
@@ -22,8 +21,7 @@ class ViewController: UIViewController {
         labelConstraints()
         emailTextFieldColnstraints()
         passwordTextFielddColnstraints()
-        noAcButtonConstraints()
-        signInButtonConctraints()
+        signUpButtonConctraints()
         
     }
     
@@ -41,15 +39,13 @@ class ViewController: UIViewController {
             self.view.addSubview(targetLabel)
         }
     // MARK: - initTextField
-    func initTextField(targetTextField: UITextField, font: UIFont?, center: CGPoint, placeholder: String, isSecureTextEntry: Bool) {
+    func initTextField(targetTextField: UITextField, font: UIFont?, center: CGPoint, placeholder: String) {
         targetTextField.font = font
         targetTextField.textColor = .gray
         targetTextField.placeholder = placeholder
         targetTextField.clearButtonMode = .whileEditing
         targetTextField.clearButtonMode = .unlessEditing
         targetTextField.autocapitalizationType = .none
-        targetTextField.isSecureTextEntry = isSecureTextEntry
-    
         self.view.addSubview(targetTextField)
     }
     // MARK: - initButton
@@ -62,24 +58,18 @@ class ViewController: UIViewController {
         }
     
     @objc func signUp(sender: UIButton!) {
-      print("Button tapped 1")
-        let vc: RegViewController = RegViewController()  // переход на второй vc
-        self.present(vc, animated: true, completion: nil) 
-    }
-    
-    @objc func singIn(sender: UIButton!) {
-        service.signIn(email: emailTextField.text!, password: passwordTextField.text!) { isSign in
-            if isSign {
-                UserDefaults.standard.setValue(true, forKey: "isLogin")
+      print("Button tapped 3")
+        service.regNewUser(email: emailTextField.text!, password: passwordTextField.text!) { isReg in
+            if isReg {
+                self.dismiss(animated: true)
             }
         }
-      print("Button tapped 2")
         
     }
     // MARK: - labelConstraints
     
     private func labelConstraints() {
-        initLabel(targetLabel: label, text: "Firebase", font: UIFont(name: "Helvetica", size: 33), center: self.view.center)
+        initLabel(targetLabel: label, text: "Регистрация", font: UIFont(name: "Helvetica", size: 33), center: self.view.center)
             label.snp.makeConstraints { maker in
                 maker.centerX.equalToSuperview()
                 maker.top.equalToSuperview().inset(200)
@@ -88,7 +78,7 @@ class ViewController: UIViewController {
     
     // MARK: - emailTextFieldColnstraints
     private func emailTextFieldColnstraints() {
-        initTextField(targetTextField: emailTextField, font: UIFont(name: "Helvetica", size: 30), center: self.view.center, placeholder: "Email", isSecureTextEntry: false)
+        initTextField(targetTextField: emailTextField, font: UIFont(name: "Helvetica", size: 30), center: self.view.center, placeholder: "Email")
         emailTextField.snp.makeConstraints { maker in
             maker.centerX.equalToSuperview()
             maker.top.equalTo(label).inset(100)
@@ -96,29 +86,21 @@ class ViewController: UIViewController {
     }
     // MARK: - passwordTextFielddColnstraints
     private func passwordTextFielddColnstraints() {
-        initTextField(targetTextField: passwordTextField, font: UIFont(name: "Helvetica", size: 30), center: self.view.center, placeholder: "Password", isSecureTextEntry: true)
+        initTextField(targetTextField: passwordTextField, font: UIFont(name: "Helvetica", size: 30), center: self.view.center, placeholder: "Password")
         passwordTextField.snp.makeConstraints { maker in
             maker.centerX.equalToSuperview()
             maker.top.equalTo(emailTextField).inset(50)
         }
     }
-    //MARK: - noAcButtonConctraints
-    private func noAcButtonConstraints() {
-        initButton(targetButton: noAcButton, text: "Нет аккаунта", action: #selector(signUp))
-        noAcButton.snp.makeConstraints { maker in
+    //MARK: - sigInButtonConctraints
+    private func signUpButtonConctraints() {
+        initButton(targetButton: signUpButton, text: "Войти",action: #selector(signUp))
+        signUpButton.snp.makeConstraints { maker in
             maker.centerX.equalToSuperview()
-            maker.top.equalTo(passwordTextField).inset(70)
-            maker.left.right.equalToSuperview().inset(50)
-        }
-    }
-    //MARK: - loginButtonConctraints
-    private func signInButtonConctraints() {
-        initButton(targetButton: signInButton, text: "Войти", action: #selector(singIn))
-        signInButton.snp.makeConstraints { maker in
-            maker.centerX.equalToSuperview()
-            maker.top.equalTo(noAcButton).inset(50)
+            maker.top.equalTo(passwordTextField).inset(50)
             maker.left.right.equalToSuperview().inset(50)
         }
     }
 }
+
 
